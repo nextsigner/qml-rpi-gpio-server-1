@@ -10,14 +10,10 @@ ApplicationWindow {
     height: 500
     color: 'black'
     property int fs: width*0.02
-    property string ip: '127.0.0.1'
+    property string ip: '192.168.1.55'
     property int port: 12345
     property string serverName: 'chatserver'
     property var container: xApp
-    /*Component.onCompleted:{
-        unik.initWebSocketServer(app.ip, app.port, app.serverName);
-    }*/
-
     Connections {
         id:connCW
         onClientConnected:{
@@ -50,16 +46,21 @@ ApplicationWindow {
             id:col1
             anchors.centerIn: parent
             spacing: app.fs
+            Circuito1{
+                id:c1
+                width: pinesRPI.width
+                z: pinesRPI.z+1
+            }
             PinesRPI{id:pinesRPI}
             Row{
                 spacing: app.fs
                 Button{
                     id: botPin11
-                    text: checked?'Poner Pin 11 en Low':'Poner Pin 11 en High'
+                    text: !checked?'Poner Pin 11 en Low':'Poner Pin 11 en High'
                     font.pixelSize: app.fs
                     checkable: true
                     onClicked: {
-                        if(!checked){
+                        if(checked){
                             unik.writePinHigh(11)
                         }else{
                             unik.writePinLow(11)
@@ -68,11 +69,11 @@ ApplicationWindow {
                 }
                 Button{
                     id:botPin13
-                    text: checked?'Poner Pin 13 en Low':'Poner Pin 13 en High'
+                    text: !checked?'Poner Pin 13 en Low':'Poner Pin 13 en High'
                     font.pixelSize: app.fs
                     checkable: true
                     onClicked: {
-                        if(!checked){
+                        if(checked){
                             unik.writePinHigh(13)
                         }else{
                             unik.writePinLow(13)
@@ -83,6 +84,7 @@ ApplicationWindow {
         }
     }
     Rectangle{
+        visible: false
         id: l1
         width: app.fs*0.1
         height: app.fs*3
@@ -96,6 +98,7 @@ ApplicationWindow {
         }
     }
     Rectangle{
+        visible: false
         id: l3
         width: app.fs*0.1
         height: app.fs*2
@@ -193,6 +196,7 @@ ApplicationWindow {
 
     }
     Rectangle{
+        visible:false
         id: lm1
         width: app.fs*0.1
         height: app.fs*3
@@ -251,6 +255,7 @@ ApplicationWindow {
         }
     }
     Rectangle{
+        visible: false
         id: lm4
         width: app.fs*0.1
         height: app.fs*3
