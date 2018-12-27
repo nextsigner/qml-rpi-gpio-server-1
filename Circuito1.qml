@@ -21,6 +21,7 @@ Rectangle{
                 id:l2
                 width: app.fs*20+app.fs*0.5+2
                 height: 2
+                color: 'red'
             }
             Rectangle{//espacio
                 width: app.fs+app.fs
@@ -31,10 +32,12 @@ Rectangle{
                 id:l22
                 width: app.fs*6
                 height: 2
+                color: anHel.running?'red':'white'
                 Rectangle{
                     width: 2
                     height: app.fs*3
                     anchors.right: parent.right
+                    color: anHel.running?'red':'white'
                     Rectangle{
                         width: app.fs*3
                         height: width
@@ -51,7 +54,7 @@ Rectangle{
                                 repeat: true
                                 interval: 50
                                 onTriggered: {
-                                    anHel.running=unik.pinIsHigh(13)
+                                    anHel.running=unik.pinIsHigh(12)
                                 }
                             }
                             SequentialAnimation{
@@ -88,9 +91,8 @@ Rectangle{
             width: r.width
             height: app.fs*3+app.fs*0.25
             color: 'transparent'
-            //border.width: 1
-            //border.color: 'gray'
             Rectangle{
+                id: xRele
                 width: app.fs*3+app.fs*0.25
                 height: width
                 color: 'transparent'
@@ -106,15 +108,18 @@ Rectangle{
                     Rectangle{
                         width: app.fs*0.5
                         height: 2
+                        color: 'red'
                         Rectangle{
                             width: 2
                             height: app.fs*3-app.fs*0.5-4
                             anchors.bottom: parent.top
+                            color: 'red'
                         }
                         Rectangle{
                             width: 2
                             height: app.fs+app.fs*0.25
                             anchors.bottom: parent.top
+                            color: 'red'
                         }
                         Rectangle{
                             width: 6
@@ -123,23 +128,27 @@ Rectangle{
                             antialiasing: true
                             anchors.horizontalCenter: parent.right
                             anchors.verticalCenter: parent.verticalCenter
+                            color: 'red'
                         }
                     }
                     Rectangle{
                         width: app.fs*0.5
                         height: 2
                         anchors.right: parent.right
+                        color: anHel.running?'red':'white'
                         Rectangle{
                             width: 2
                             height: app.fs*3-app.fs*0.5-4
                             anchors.bottom: parent.top
                             anchors.right: parent.right
+                            color: anHel.running?'red':'white'
                         }
                         Rectangle{
                             width: 2
                             height: app.fs+app.fs*0.25
                             anchors.bottom: parent.top
                             anchors.right: parent.right
+                            color: anHel.running?'red':'white'
                         }
                         Rectangle{
                             width: 6
@@ -148,11 +157,13 @@ Rectangle{
                             antialiasing: true
                             anchors.horizontalCenter: parent.left
                             anchors.verticalCenter: parent.verticalCenter
+                            color: anHel.running?'red':'white'
                             Rectangle{
                                 width: app.fs
                                 height: 2
                                 antialiasing: true
-                                transform: Rotation{origin.x:2; origin.y:1; angle: -135}
+                                color: anHel.running?'red':'white'
+                                transform: Rotation{origin.x:2; origin.y:1; angle: anHel.running?-180:-135}
                             }
                         }
                     }
@@ -168,10 +179,24 @@ Rectangle{
                         Rectangle{
                             width: app.fs*0.5
                             height: width
-                            border.width: 2
-                            border.color: 'white'
-                            color: 'transparent'
                             radius: width*0.5
+                            gradient: Gradient {
+                                GradientStop {
+                                    position: 0.00;
+                                    color: anHel.running?'red':'white';
+                                }
+                                GradientStop {
+                                    position: 1.00;
+                                    color: anHel.running?'black':'white';
+                                }
+                            }
+                            Rectangle{
+                                width: parent.width-4
+                                height: width
+                                color: '#333'
+                                anchors.centerIn: parent
+                            }
+
                         }
                     }
                 }
@@ -186,9 +211,20 @@ Rectangle{
                         width: app.fs*0.25+3
                         height: 2
                         x:app.fs*0.5-2
+                        gradient: Gradient {
+                            GradientStop {
+                                position: 0.00;
+                                color: anHel.running?'red':'white';
+                            }
+                            GradientStop {
+                                position: 1.00;
+                                color: anHel.running?'black':'white';
+                            }
+                        }
                         Rectangle{
                             width: 2
-                            height: app.fs*3
+                            height: app.fs*3-2
+                            color: anHel.running?'red':'white'
                         }
                     }
                     Rectangle{
@@ -196,10 +232,21 @@ Rectangle{
                         height: 2
                         anchors.right: parent.right
                         anchors.rightMargin: app.fs*0.25+2
+                        gradient: Gradient {
+                            GradientStop {
+                                position: 0.00;
+                                color: anHel.running?'red':'white';
+                            }
+                            GradientStop {
+                                position: 1.00;
+                                color: anHel.running?'black':'white';
+                            }
+                        }
                         Rectangle{
                             width: 2
                             height: app.fs*8
                             x:parent.width-2
+                            color: anHel.running?'black':'white'
                         }
                     }
                 }
@@ -210,8 +257,6 @@ Rectangle{
             width: r.width
             height: app.fs*3
             color: 'transparent'
-            //border.width: 1
-            //border.color: 'gray'
             Rectangle{
                 width: app.fs*3
                 height: width
@@ -228,36 +273,43 @@ Rectangle{
                         width: app.fs*9+app.fs*0.5+2
                         height: 2
                         anchors.right: parent.left
+                        color: 'red'
                         Rectangle{
                             width: 2
                             height: app.fs*5
                             anchors.left: parent.left
+                            color: 'red'
                         }
                     }
                     Rectangle{
                         width: app.fs*5
                         height: 2
                         anchors.left: parent.right
+                        color: anHel.running?'red':'white'
                     }
 
                     Rectangle{
                         width: app.fs*0.5
                         height: 2
+                        color: 'red'
                         Rectangle{
                             width: app.fs*1.4
                             height: 2
                             transform: Rotation{origin.x: 0; origin.y: 1; angle: 45}
                             x: parent.width
+                            color: 'red'
                         }
                     }
                     Rectangle{
                         width: app.fs*0.5
                         height: 2
                         anchors.right: parent.right
+                        color: anHel.running?'red':'white'
                         Rectangle{
                             width: app.fs*1.4
                             height: 2
                             transform: Rotation{origin.x: 0; origin.y: 1; angle: 135}
+                            color: anHel.running?'red':'white'
                             Item{
                                 width: app.fs*0.25
                                 height: width
@@ -268,7 +320,7 @@ Rectangle{
                                     width: app.fs*0.5
                                     height: width
                                     rotation: 45
-                                    color: 'white'
+                                    color: anHel.running?'red':'white'
                                 }
                                 Rectangle{
                                     anchors.centerIn: parent
@@ -283,7 +335,7 @@ Rectangle{
                     Rectangle{
                         width: 2
                         height: app.fs*4
-                        color: 'white'
+                        color: anHel.running?'red':'white'
                         anchors.horizontalCenter: parent.horizontalCenter
                         y:app.fs
                     }

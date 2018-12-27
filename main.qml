@@ -14,6 +14,8 @@ ApplicationWindow {
     property int port: 12345
     property string serverName: 'chatserver'
     property var container: xApp
+
+
     Connections {
         id:connCW
         onClientConnected:{
@@ -56,14 +58,14 @@ ApplicationWindow {
                 spacing: app.fs
                 Button{
                     id: botPin11
-                    text: !checked?'Poner Pin 11 en Low':'Poner Pin 11 en High'
+                    text: !checked?'Poner Pin 12 en Low':'Poner Pin 12 en High'
                     font.pixelSize: app.fs
                     checkable: true
                     onClicked: {
-                        if(checked){
-                            unik.writePinHigh(11)
+                        if(!checked){
+                            unik.writePinHigh(12)
                         }else{
-                            unik.writePinLow(11)
+                            unik.writePinLow(12)
                         }
                     }
                 }
@@ -274,10 +276,10 @@ ApplicationWindow {
     Component.onCompleted: {
         unik.initWebSocketServer(app.ip, app.port, app.serverName);
         unik.initRpiGpio()
-        unik.setPinType(11,0)
-        unik.setPinState(11, 1)
-        unik.setPinType(13,0)
-        unik.setPinState(13, 1)
-        unik.setPinType(17,0)
+        unik.setPinType(12,0)
+        unik.setPinState(12, 1)
+        //unik.setPinType(13,0)
+        //unik.setPinState(13, 1)
+        //unik.setPinType(17,0)
     }
 }
