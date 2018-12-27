@@ -1,20 +1,55 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.0
 import QtGraphicalEffects 1.0
 
-Rectangle{
+Item{
     id: r
-    height: col1.height+app.fs*2
-    color: "#333"
-    border.width: 2
-    border.color: 'red'
+    height: colR.height
+    property bool pin12IsLow: false
     Column{
-        id:col1
+        id:colR
+        spacing: app.fs*0.5
+        width: parent.width
         anchors.verticalCenter: parent.verticalCenter
+        Row{
+            anchors.horizontalCenter: parent.horizontalCenter
+            Button{
+                id: botPin12
+                text: !checked?'Poner Pin 12 en Low':'Poner Pin 12 en High'
+                font.pixelSize: app.fs
+                checkable: true
+                onCheckedChanged: {
+                    if(!checked){
+                        unik.writePinHigh(12)
+                    }else{
+                        unik.writePinLow(12)
+                    }
+                }
+            }
+        }
+        Rectangle{
+            id: r2
+            height: col1.height+app.fs*2
+            width: r.width
+            color: "#1f7c30"
+            border.width: 2
+            border.color: "#2ad0d5"
+        Column{
+        id:col1
         spacing: app.fs
+        anchors.verticalCenter: parent.verticalCenter
         Rectangle{
             id:l1
-            width: app.fs*30
+            width: app.fs*32+app.fs*0.5
             height: 2
+            color: r.pin12IsLow?'black':'white'
+            Text{
+                text: '<b>220v</b>'
+                font.pixelSize: app.fs*0.6
+                anchors.top: parent.bottom
+                anchors.topMargin: app.fs*0.2
+                color: 'white'
+            }
         }
         Row{
             Rectangle{
@@ -26,40 +61,78 @@ Rectangle{
             Rectangle{//espacio
                 width: app.fs+app.fs
                 height: 2
-                color: '#333'
+                color: r2.color
             }
             Rectangle{
                 id:l22
                 width: app.fs*6
                 height: 2
-                color: anHel.running?'red':'white'
+                color: r.pin12IsLow?'red':'white'
                 Rectangle{
                     width: 2
                     height: app.fs*3
                     anchors.right: parent.right
-                    color: anHel.running?'red':'white'
-                    Rectangle{
-                        width: app.fs*3
+                    color: r.pin12IsLow?'red':'white'
+                    Item{
+                        width: app.fs*2
                         height: width
-                        color: 'gray'
                         anchors.left: parent.right
                         anchors.top: parent.bottom
+                        Rectangle{
+                            width: app.fs
+                            height: 2
+                            color: r.pin12IsLow?'red':'white'
+                            z:parent.z-1
+                            Rectangle{
+                                width: 6
+                                height: width
+                                radius: width*0.5
+                                color: parent.color
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.left
+                            }
+                        }
+                        Rectangle{
+                            width: app.fs
+                            height: 2
+                            color: r.pin12IsLow?'black':'white'
+                            anchors.bottom: parent.bottom
+                            z:parent.z-1
+                            Rectangle{
+                                width: 6
+                                height: width
+                                radius: width*0.5
+                                color: parent.color
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.left
+                            }
+                        }
+                        Text{
+                            text: '<b>Engine</b>'
+                            font.pixelSize: app.fs*0.5
+                            horizontalAlignment: Text.AlignHCenter
+                            color: 'white'
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: -app.fs*2
+                            rotation: -90
+                        }
                         Item{
                             id: hel
                             width: app.fs*4
                             height: width
                             anchors.centerIn: parent
-                            Timer{
-                                running: true
-                                repeat: true
-                                interval: 50
-                                onTriggered: {
-                                    anHel.running=unik.pinIsHigh(12)
-                                }
+                            anchors.horizontalCenterOffset: app.fs*0.5
+                            Rectangle{
+                                width: app.fs*2
+                                height: width
+                                color: 'black'
+                                radius: app.fs*0.2
+                                anchors.centerIn: parent
                             }
                             SequentialAnimation{
                                 id: anHel
-                                running: false
+                                running: r.pin12IsLow
                                 loops: Animation.Infinite
                                 NumberAnimation {
                                     target: hel
@@ -83,12 +156,33 @@ Rectangle{
                                 anchors.fill: helice
                             }
                         }
+                        Rectangle{
+                            width: 2
+                            height: app.fs*2
+                            color: r.pin12IsLow?'black':'white'
+                            z:parent.z-1
+                            anchors.top: parent.bottom
+                            Rectangle{
+                                width: app.fs*4
+                                height: 2
+                                color: r.pin12IsLow?'black':'white'
+                                anchors.bottom: parent.bottom
+                                Rectangle{
+                                    width: 2
+                                    height: app.fs*8
+                                    color: r.pin12IsLow?'black':'white'
+                                    anchors.bottom: parent.top
+                                    anchors.right: parent.right
+                                }
+                            }
+                        }
                     }
+
                 }
             }
         }
         Rectangle{
-            width: r.width
+            width: r2.width
             height: app.fs*3+app.fs*0.25
             color: 'transparent'
             Rectangle{
@@ -99,12 +193,21 @@ Rectangle{
                 border.width: 2
                 border.color: 'white'
                 x:app.fs*20
+                Text{
+                    text: '<b>Relé</b>'
+                    font.pixelSize: app.fs*0.6
+                    anchors.bottom: parent.top
+                    anchors.bottomMargin: app.fs*0.2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: 'white'
+                }
                 Rectangle{
                     width: app.fs*2
                     height: 2
                     y: app.fs+app.fs*0.25
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: 'transparent'
+
                     Rectangle{
                         width: app.fs*0.5
                         height: 2
@@ -135,20 +238,20 @@ Rectangle{
                         width: app.fs*0.5
                         height: 2
                         anchors.right: parent.right
-                        color: anHel.running?'red':'white'
+                        color: r.pin12IsLow?'red':'white'
                         Rectangle{
                             width: 2
                             height: app.fs*3-app.fs*0.5-4
                             anchors.bottom: parent.top
                             anchors.right: parent.right
-                            color: anHel.running?'red':'white'
+                            color: r.pin12IsLow?'red':'white'
                         }
                         Rectangle{
                             width: 2
                             height: app.fs+app.fs*0.25
                             anchors.bottom: parent.top
                             anchors.right: parent.right
-                            color: anHel.running?'red':'white'
+                            color: r.pin12IsLow?'red':'white'
                         }
                         Rectangle{
                             width: 6
@@ -157,13 +260,13 @@ Rectangle{
                             antialiasing: true
                             anchors.horizontalCenter: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                            color: anHel.running?'red':'white'
+                            color: r.pin12IsLow?'red':'white'
                             Rectangle{
                                 width: app.fs
                                 height: 2
                                 antialiasing: true
-                                color: anHel.running?'red':'white'
-                                transform: Rotation{origin.x:2; origin.y:1; angle: anHel.running?-180:-135}
+                                color: r.pin12IsLow?'red':'white'
+                                transform: Rotation{origin.x:2; origin.y:1; angle: r.pin12IsLow?-180:-135}
                             }
                         }
                     }
@@ -183,17 +286,17 @@ Rectangle{
                             gradient: Gradient {
                                 GradientStop {
                                     position: 0.00;
-                                    color: anHel.running?'red':'white';
+                                    color: r.pin12IsLow?'red':'white';
                                 }
                                 GradientStop {
                                     position: 1.00;
-                                    color: anHel.running?'black':'white';
+                                    color: r.pin12IsLow?'black':'white';
                                 }
                             }
                             Rectangle{
                                 width: parent.width-4
                                 height: width
-                                color: '#333'
+                                color: r2.color
                                 anchors.centerIn: parent
                             }
 
@@ -203,7 +306,7 @@ Rectangle{
                 Rectangle{
                     width: parent.width-4
                     height: app.fs*0.25
-                    color: '#333'
+                    color: r2.color
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: app.fs*0.5
@@ -214,17 +317,17 @@ Rectangle{
                         gradient: Gradient {
                             GradientStop {
                                 position: 0.00;
-                                color: anHel.running?'red':'white';
+                                color: r.pin12IsLow?'red':'white';
                             }
                             GradientStop {
                                 position: 1.00;
-                                color: anHel.running?'black':'white';
+                                color: r.pin12IsLow?'black':'white';
                             }
                         }
                         Rectangle{
                             width: 2
                             height: app.fs*3-2
-                            color: anHel.running?'red':'white'
+                            color: r.pin12IsLow?'red':'white'
                         }
                     }
                     Rectangle{
@@ -235,18 +338,18 @@ Rectangle{
                         gradient: Gradient {
                             GradientStop {
                                 position: 0.00;
-                                color: anHel.running?'red':'white';
+                                color: r.pin12IsLow?'red':'white';
                             }
                             GradientStop {
                                 position: 1.00;
-                                color: anHel.running?'black':'white';
+                                color: r.pin12IsLow?'black':'white';
                             }
                         }
                         Rectangle{
                             width: 2
                             height: app.fs*8
                             x:parent.width-2
-                            color: anHel.running?'black':'white'
+                            color: r.pin12IsLow?'black':'white'
                         }
                     }
                 }
@@ -254,7 +357,7 @@ Rectangle{
         }
         Rectangle{
             id:xTransitor
-            width: r.width
+            width: r2.width
             height: app.fs*3
             color: 'transparent'
             Rectangle{
@@ -264,6 +367,14 @@ Rectangle{
                 border.color: 'white'
                 color: 'transparent'
                 x: app.fs*12+app.fs*0.5
+                Text{
+                    text: '<b>Transistor</b>'
+                    font.pixelSize: app.fs*0.6
+                    anchors.bottom: parent.top
+                    anchors.bottomMargin: app.fs*0.2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: 'white'
+                }
                 Rectangle{
                     width: parent.width
                     height: 2
@@ -274,24 +385,36 @@ Rectangle{
                         height: 2
                         anchors.right: parent.left
                         color: 'red'
+
                         Rectangle{
                             width: 2
                             height: app.fs*5
                             anchors.left: parent.left
                             color: 'red'
+                            Text{
+                                text: '<b>RPI<b><br/><b>OUT<b><br/><b>5v</b>'
+                                font.pixelSize: app.fs*0.5
+                                horizontalAlignment: Text.AlignHCenter
+                                color: 'white'
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.horizontalCenterOffset: app.fs*1.2
+                                rotation: -90
+                            }
                         }
                     }
                     Rectangle{
                         width: app.fs*5
                         height: 2
                         anchors.left: parent.right
-                        color: anHel.running?'red':'white'
+                        color: r.pin12IsLow?'red':'white'
                     }
 
                     Rectangle{
                         width: app.fs*0.5
                         height: 2
                         color: 'red'
+
                         Rectangle{
                             width: app.fs*1.4
                             height: 2
@@ -304,12 +427,12 @@ Rectangle{
                         width: app.fs*0.5
                         height: 2
                         anchors.right: parent.right
-                        color: anHel.running?'red':'white'
+                        color: r.pin12IsLow?'red':'white'
                         Rectangle{
                             width: app.fs*1.4
                             height: 2
                             transform: Rotation{origin.x: 0; origin.y: 1; angle: 135}
-                            color: anHel.running?'red':'white'
+                            color: r.pin12IsLow?'red':'white'
                             Item{
                                 width: app.fs*0.25
                                 height: width
@@ -320,14 +443,14 @@ Rectangle{
                                     width: app.fs*0.5
                                     height: width
                                     rotation: 45
-                                    color: anHel.running?'red':'white'
+                                    color: r.pin12IsLow?'red':'white'
                                 }
                                 Rectangle{
                                     anchors.centerIn: parent
                                     width: app.fs*0.75
                                     height: width
                                     anchors.horizontalCenterOffset: app.fs*0.25
-                                    color: '#333'
+                                    color: r2.color
                                 }
                             }
                         }
@@ -335,13 +458,40 @@ Rectangle{
                     Rectangle{
                         width: 2
                         height: app.fs*4
-                        color: anHel.running?'red':'white'
+                        color: r.pin12IsLow?'red':'white'
                         anchors.horizontalCenter: parent.horizontalCenter
                         y:app.fs
+                        Text{
+                            text: '<b>GPIO<b><br/><b>OUT<b><br/><b>1v</b>'
+                            font.pixelSize: app.fs*0.5
+                            horizontalAlignment: Text.AlignHCenter
+                            color: 'white'
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: app.fs*1.2
+                            rotation: -90
+                        }
                     }
                 }
 
             }
         }
+    }
+    }
+    }
+    Timer{
+        running: true
+        repeat: true
+        interval: 50
+        onTriggered: {
+            r.pin12IsLow=unik.pinIsHigh(12)
+            if(r.pin12IsLow){
+                botPin12.checked=true
+            }
+        }
+    }
+    Component.onCompleted: {
+        unik.setPinType(12,0)
+        unik.setPinState(12, 1)
     }
 }

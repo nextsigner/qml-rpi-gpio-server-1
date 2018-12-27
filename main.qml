@@ -48,41 +48,8 @@ ApplicationWindow {
             id:col1
             anchors.centerIn: parent
             spacing: app.fs
-            Circuito1{
-                id:c1
-                width: pinesRPI.width
-                z: pinesRPI.z+1
-            }
+            Circuito1{width: pinesRPI.width;z: pinesRPI.z+1}
             PinesRPI{id:pinesRPI}
-            Row{
-                spacing: app.fs
-                Button{
-                    id: botPin11
-                    text: !checked?'Poner Pin 12 en Low':'Poner Pin 12 en High'
-                    font.pixelSize: app.fs
-                    checkable: true
-                    onClicked: {
-                        if(!checked){
-                            unik.writePinHigh(12)
-                        }else{
-                            unik.writePinLow(12)
-                        }
-                    }
-                }
-                Button{
-                    id:botPin13
-                    text: !checked?'Poner Pin 13 en Low':'Poner Pin 13 en High'
-                    font.pixelSize: app.fs
-                    checkable: true
-                    onClicked: {
-                        if(checked){
-                            unik.writePinHigh(13)
-                        }else{
-                            unik.writePinLow(13)
-                        }
-                    }
-                }
-            }
         }
     }
     Rectangle{
@@ -275,11 +242,6 @@ ApplicationWindow {
     }
     Component.onCompleted: {
         unik.initWebSocketServer(app.ip, app.port, app.serverName);
-        unik.initRpiGpio()
-        unik.setPinType(12,0)
-        unik.setPinState(12, 1)
-        //unik.setPinType(13,0)
-        //unik.setPinState(13, 1)
-        //unik.setPinType(17,0)
+        unik.initRpiGpio()        
     }
 }
