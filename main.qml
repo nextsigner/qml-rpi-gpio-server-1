@@ -15,7 +15,8 @@ ApplicationWindow {
     property string serverName: 'chatserver'
     property var container: xApp
 
-
+    Connections {target: unik;onUkStdChanged: processLogData((''+unik.ukStd));}
+    Connections {target: unik;onStdErrChanged: processLogData((''+unik.ukStd));}
     Connections {
         id:connCW
         onClientConnected:{
@@ -241,7 +242,17 @@ ApplicationWindow {
         onActivated: Qt.quit()
     }
     Component.onCompleted: {
-        unik.initWebSocketServer(app.ip, app.port, app.serverName);
-        unik.initRpiGpio()        
+        unik.initRpiGpio()
+        unik.run('sudo /bin/hostname -I')
+    }
+    //property int v: 0
+    function processLogData(d){
+        var ip=''
+        if((''+d).indexOf('192.168.')===0&&(''+d).indexOf(' ')>0){
+            ip=(''+d).split(' ')[0]
+            console.log('Init WebSocket Server: '+ip)
+            app.ip=ip
+            unik.initWebSocketServer(app.ip, app.port, app.serverName);
+        }
     }
 }
