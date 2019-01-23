@@ -25,6 +25,9 @@ ApplicationWindow {
             Circuito1{width: pinesRPI.width;z: pinesRPI.z+1}
             PinesRPI{id:pinesRPI}
         }
+        XDataView{
+            id: xDataView
+        }
     }
     Shortcut{
         sequence: 'Esc'
@@ -36,13 +39,23 @@ ApplicationWindow {
         id:connCW
         onClientConnected:{
             console.log("A new client connected.")
+            xDataView.lmu.updateUserList()
         }
     }
     Connections {
         target: cs
+        onUserListChanged:{
+            xDataView.lmu.updateUserList()
+        }
         onNewMessage:{
+            xDataView.lmc.addCode(user+'\n'+msg)
+            if((''+user)==='gpio-server'){
+                console.log('gpio-server: '+msg)
+                return
+            }
             console.log('Receiving a new data: '+user+' code: '+msg)
             var obj = Qt.createQmlObject(msg, xApp, 'remotecode')
+            xDataView.lmc.addCode('['+time+']'+user+':'+msg)
         }
     }
     Timer{
@@ -53,7 +66,7 @@ ApplicationWindow {
             if(cw){
                 connCW.target=cw
             }
-
+            xDataView.ws.url='ws://'+app.ip+':'+app.port
         }
     }
     Component.onCompleted: {
